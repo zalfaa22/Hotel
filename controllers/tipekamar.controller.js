@@ -5,6 +5,7 @@ const  path = require("path")
 const upload = require(`./upload-tipekamar`).single(`foto`)
 const fs = require(`fs`)
 const md5 = require(`md5`)
+const tipe_kamar = require("../models/tipe_kamar")
 
 
 exports.getAllTipekamar = async (request, response) => {
@@ -50,13 +51,15 @@ exports.addTipekamar = (request, response) => {
         harga: request.body.harga,
         deskripsi: request.body.deskripsi,
         foto: request.file.filename
-    }
+    };
+    console.log("nama_tipe_kamar: "  +newTipekamar.nama_tipe_kamar);
     
     modelTipekamar.create(newTipekamar).then(result => {
         return response.json({
             success: true,
             data: result,
             message: `Tipe kamar telah ditambahkan`
+            
         })
     })
     
