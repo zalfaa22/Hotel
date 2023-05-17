@@ -4,7 +4,12 @@ const tipe_kamarModel = require("../models/index").tipe_kamar;
 const Op = require("sequelize").Op;
 
 exports.getAllKamar = async (request, response) => {
-  let kamars = await kamarModel.findAll();
+  let kamars = await kamarModel.findAll({
+  include: {
+    model: tipe_kamarModel,
+    attributes: ['nama_tipe_kamar']
+  }
+});
   return response.json({
     success: true,
     data: kamars,
@@ -40,7 +45,7 @@ exports.addKamar = async (request, response) => {
       id: newKamar.tipeKamarId,
     },
   });
-  console.log(tipe_kamar.id);
+  
   let tes = newKamar.tipeKamarId == tipe_kamar.id;
   console.log(tes);
   if (tes) {
