@@ -166,6 +166,33 @@ exports.addPemesanan = async (request, response) => {
 }
 };
 
+exports.getByUser = async (request, response) => {
+  let email = request.params.email;
+
+  const result = await pemesananModel.findAll({
+    include: {
+      model: modelTipekamar,
+      attributes: ["nama_tipe_kamar", "harga"]
+    },
+    where: {
+      email_pemesan : email
+    },
+    order: [['createdAt', 'DESC']],
+  });
+  if (result.length === 0) {
+    return response.json({
+      success: true,
+      data: [],
+      message: "Data tidak ditemukan",
+    })
+  }
+
+  response.json({
+    success: true,
+    data: result,
+    message: `All Transaction have been loaded...`,
+  });
+};
   
 exports.updatePemesanan = async (request, response) => {
   let nomor_kamar = request.body.nomor_kamar;

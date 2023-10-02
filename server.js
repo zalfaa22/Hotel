@@ -14,11 +14,13 @@ const userRoute = require("./routes/user.route")
 const tipekamarRoute = require("./routes/tipekamar.route")
 const kamarRoute = require("./routes/kamar.route")
 const pemesananRoute = require("./routes/pemesanan.route")
+const customerRoute = require("./routes/customer.route")
 
 app.use("/user", userRoute)
 app.use("/tipekamar", tipekamarRoute)
 app.use("/kamar", kamarRoute)
 app.use("/pemesanan", pemesananRoute)
+app.use("/customer", customerRoute)
 
 app.listen(PORT, () => {
     console.log(`Server of Hotel runs on port ${PORT}`)

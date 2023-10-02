@@ -9,7 +9,7 @@ const tipe_kamar = require("../models/tipe_kamar")
 
 
 exports.getAllTipekamar = async (request, response) => {
-    let tipe_kamars = await modelTipekamar.findAll()
+    let tipe_kamars = await modelTipekamar.findAll({order : [['createdAt', 'DESC']],})
     return response.json({
     success: true,
     data: tipe_kamars,
@@ -18,13 +18,12 @@ exports.getAllTipekamar = async (request, response) => {
 }
   
 exports.findTipekamar = async (request, response) => {
-    let nama_tipe_kamar = request.body.nama_tipe_kamar
-    let harga = request.body.harga
+    let keyword = request.body.keyword
     let tipe_kamars = await modelTipekamar.findAll({
         where: {
-            [Op.and]: [
-                { nama_tipe_kamar: { [Op.substring]: nama_tipe_kamar } },
-                { harga: { [Op.substring]: harga } }
+            [Op.or]: [
+                { nama_tipe_kamar: { [Op.substring]: keyword } },
+                { harga: { [Op.substring]: keyword } }
             ]
         }
     })

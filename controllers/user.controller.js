@@ -26,7 +26,7 @@ exports.login = async (request,response) => {
       console.log(findUser)
       //generate jwt token
       let tokenPayLoad = {
-          id_user: findUser.id_user,
+          id: findUser.id,
           email: findUser.email,
           role: findUser.role,
       };
@@ -37,7 +37,7 @@ exports.login = async (request,response) => {
           message: "Success login",
           data:{
               token: token,
-              id_user: findUser.id_user,
+              id: findUser.id,
               email: findUser.email,
               role: findUser.role,
           },
@@ -60,16 +60,45 @@ exports.getAllUser = async (request, response) => {
   });
 };
 
+exports.getAllReceptionists = async (request, response) => {
+  try {
+    let resepsionis = await modelUser.findAll({
+      where: {
+        role: 'resepsionis' // Ganti dengan nilai yang sesuai dengan role "resepsionis" dalam basis data Anda
+      },
+      order: [['createdAt', 'DESC']],
+    });
+
+    if (resepsionis.length === 0) {
+      return response.json({
+        success: true,
+        data: [],
+        message: `Tidak ada resepsionis yang ditemukan`,
+      });
+    }
+
+    return response.json({
+      success: true,
+      data: resepsionis,
+      message: `Ini adalah semua data resepsionis`,
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({
+      success: false,
+      message: `Terjadi kesalahan dalam mengambil data resepsionis`,
+    });
+  }
+};
+
 exports.findUser = async (request, response) => {
-  let nama_user = request.body.nama_user;
-  let email = request.body.email;
-  let role = request.body.role;
+  let keyword = request.body.keyword
   let users = await modelUser.findAll({
     where: {
-      [Op.and]: [
-        { nama_user: { [Op.substring]: nama_user } },
-        { email: { [Op.substring]: email } },
-        { role: { [Op.substring]: role } },
+      [Op.or]: [
+        { nama_user: { [Op.substring]: keyword } },
+        { email: { [Op.substring]: keyword } },
+        { role: { [Op.substring]: keyword } },
       ],
     },
   });
